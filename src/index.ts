@@ -10,7 +10,11 @@ AppDataSource.initialize()
     console.log('Data Source has been initialized!');
 
     app.use((ctx) => {
-      ctx.body = 'Hello, World!';
+      if (ctx.path === '/health') {
+        ctx.body = { status: 'ok' };
+      } else {
+        ctx.body = 'Hello, World!';
+      }
     });
 
     app.listen(port, () => {

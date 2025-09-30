@@ -4,7 +4,7 @@
   "description": "Nesta tarefa, o candidato deverá configurar um projeto backend utilizando Node.js e integrar a aplicação com AWS Cognito para controlar a autorização de rotas. A tarefa inclui a configuração de um banco de dados com PostgreSQL, o uso do ORM TypeORM, e a inicialização do ambiente de desenvolvimento com Docker Compose.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "lint": "eslint . --ext .ts",
@@ -30,15 +30,20 @@
     "typeorm": "^0.3.27"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/koa": "^3.0.0",
     "@types/node": "^24.6.0",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^30.2.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
