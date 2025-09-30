@@ -7,7 +7,7 @@ import { User } from '../entities/User';
 const router = new Router();
 
 router.put('/edit-account', authMiddleware, async (ctx) => {
-  const { name, role } = ctx.request.body;
+  const { name, role } = ctx.request.body as { name?: string; role?: string };
   const userFromToken = ctx.state.user;
 
   const userRepository = AppDataSource.getRepository(User);
