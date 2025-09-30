@@ -24,7 +24,12 @@
   },
   "homepage": "https://github.com/elialber/backend-interview-task#readme",
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.899.0",
+    "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa-router": "^7.4.8",
     "koa": "^3.0.1",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^14.0.0",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.27"

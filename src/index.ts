@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
 import { AppDataSource } from './data-source';
+import router from './routes';
 
 const app = new Koa();
 const port = 3000;
@@ -9,13 +11,8 @@ AppDataSource.initialize()
   .then(() => {
     console.log('Data Source has been initialized!');
 
-    app.use((ctx) => {
-      if (ctx.path === '/health') {
-        ctx.body = { status: 'ok' };
-      } else {
-        ctx.body = 'Hello, World!';
-      }
-    });
+    app.use(bodyParser());
+    app.use(router.routes()).use(router.allowedMethods());
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
@@ -24,3 +21,4 @@ AppDataSource.initialize()
   .catch((error) =>
     console.log('Error during Data Source initialization', error),
   );
+
