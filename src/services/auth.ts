@@ -1,12 +1,12 @@
-import { CognitoIdentityServiceProvider, UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
+import { CognitoIdentityProvider, UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 import { AppDataSource } from '../data-source';
 import { User } from '../entities/User';
 
-const cognito = new CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: process.env.AWS_REGION,
 });
 
-export const signInOrRegister = async (username, password) => {
+export const signInOrRegister = async (username: string, password: string): Promise<string | undefined> => {
   try {
     const authResponse = await cognito.initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
@@ -23,7 +23,7 @@ export const signInOrRegister = async (username, password) => {
 
       const userDetails = await cognito.getUser({ AccessToken: accessToken });
 
-      const email = userDetails.UserAttributes.find(attr => attr.Name === 'email')?.Value;
+      const email = userDetails.UserAttributes?.find(attr => attr.Name === 'email')?.Value;
 
       if (!email) {
         throw new Error('Email not found in Cognito user attributes');
@@ -33,8 +33,8 @@ export const signInOrRegister = async (username, password) => {
       let user = await userRepository.findOne({ where: { email } });
 
       if (!user) {
-        const name = userDetails.UserAttributes.find(attr => attr.Name === 'name')?.Value || '';
-        const role = userDetails.UserAttributes.find(attr => attr.Name === 'custom:role')?.Value || 'user';
+        const name = userDetails.UserAttributes?.find(attr => attr.Name === 'name')?.Value || '';
+        const role = userDetails.UserAttributes?.find(attr => attr.Name === 'custom:role')?.Value || 'user';
 
         user = new User();
         user.email = email;
