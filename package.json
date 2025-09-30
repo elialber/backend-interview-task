@@ -1,0 +1,36 @@
+{
+  "name": "backend-interview-task",
+  "version": "1.0.0",
+  "description": "Nesta tarefa, o candidato deverá configurar um projeto backend utilizando Node.js e integrar a aplicação com AWS Cognito para controlar a autorização de rotas. A tarefa inclui a configuração de um banco de dados com PostgreSQL, o uso do ORM TypeORM, e a inicialização do ambiente de desenvolvimento com Docker Compose.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elialber/backend-interview-task.git"
+  },
+  "keywords": [],
+  "author": "Elialber Lopes <elialberlopes@gmail.com> (https://www.twinslabs.com.br/)",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/elialber/backend-interview-task/issues"
+  },
+  "homepage": "https://github.com/elialber/backend-interview-task#readme",
+  "dependencies": {
+    "koa": "^3.0.1",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.27"
+  },
+  "devDependencies": {
+    "@types/koa": "^3.0.0",
+    "@types/node": "^24.6.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
