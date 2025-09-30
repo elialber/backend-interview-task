@@ -36,6 +36,9 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
     }
 
     const kid = decodedToken.header.kid;
+    if (!kid) {
+      throw new Error('Invalid token');
+    }
     const pem = pems[kid];
     if (!pem) {
       throw new Error('Invalid token');
