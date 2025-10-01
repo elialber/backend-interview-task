@@ -9,6 +9,10 @@ const swaggerDefinition = {
   },
   servers: [
     {
+      url: 'http://56.124.105.5',
+      description: 'Production server (AWS EC2)',
+    },
+    {
       url: 'http://localhost:3001',
       description: 'Development server',
     },
