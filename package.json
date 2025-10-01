@@ -9,7 +9,8 @@
     "dev": "./decrypt-env.sh && nodemon -r dotenv/config src/index.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "docker:dev": "docker-compose up --build"
   },
   "repository": {
     "type": "git",
