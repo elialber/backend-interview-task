@@ -89,3 +89,9 @@ typings/
 
 # Dist folder
 dist/
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
+.env.enc
