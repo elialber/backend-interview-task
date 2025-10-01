@@ -13,6 +13,10 @@ export class HttpError extends Error {
   }
 }
 
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+  throw new Error('AWS credentials are not provided in the environment variables');
+}
+
 const cognito = new CognitoIdentityProvider({
   region: process.env.AWS_REGION,
   credentials: {
