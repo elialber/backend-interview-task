@@ -10,6 +10,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write .",
+    "build": "tsc --outDir ./dist",
+    "docker:dev": "docker-compose up --build",
     "docker:dev": "docker-compose up --build"
   },
   "repository": {

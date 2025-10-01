@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # Compile TypeScript to JavaScript
-RUN npm run tsc -- --outDir ./dist
+RUN npm run build
 
 # Make port 3000 available to the world outside this container
 EXPOSE 3000
