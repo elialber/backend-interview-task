@@ -1,10 +1,17 @@
 import {
   CognitoIdentityProvider,
   UserNotFoundException,
+  InvalidParameterException,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { AppDataSource } from '../data-source';
 import { User } from '../entities/User';
 import crypto from 'crypto';
+
+export class HttpError extends Error {
+  constructor(public statusCode: number, message: string) {
+    super(message);
+  }
+}
 
 const cognito = new CognitoIdentityProvider({
   region: process.env.AWS_REGION,
@@ -69,23 +76,30 @@ export const signInOrRegister = async (
     }
   } catch (error) {
     if (error instanceof UserNotFoundException) {
-      const secretHash = calculateSecretHash(username);
-      await cognito.signUp({
-        ClientId: process.env.COGNITO_CLIENT_ID || '',
-        Username: username,
-        Password: password,
-        SecretHash: secretHash,
-        UserAttributes: [{ Name: 'email', Value: username }],
-      });
+      try {
+        const secretHash = calculateSecretHash(username);
+        await cognito.signUp({
+          ClientId: process.env.COGNITO_CLIENT_ID || '',
+          Username: username,
+          Password: password,
+          SecretHash: secretHash,
+          UserAttributes: [{ Name: 'email', Value: username }],
+        });
 
-      // For simplicity, we are auto-confirming the user. 
-      // In a real-world scenario, you would have a verification flow (e.g., email or SMS).
-      await cognito.adminConfirmSignUp({
-        UserPoolId: process.env.COGNITO_USER_POOL_ID || '',
-        Username: username,
-      });
+        // For simplicity, we are auto-confirming the user. 
+        // In a real-world scenario, you would have a verification flow (e.g., email or SMS).
+        await cognito.adminConfirmSignUp({
+          UserPoolId: process.env.COGNITO_USER_POOL_ID || '',
+          Username: username,
+        });
 
-      return signInOrRegister(username, password);
+        return signInOrRegister(username, password);
+      } catch (error) {
+        if (error instanceof InvalidParameterException) {
+          throw new HttpError(400, error.message);
+        }
+        throw error;
+      }
     }
     console.error(error);
     throw new Error('Authentication failed');

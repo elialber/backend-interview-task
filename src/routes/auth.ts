@@ -35,19 +35,29 @@ const router = new Router();
  *         description: Unauthorized
  */
 router.post('/auth', async (ctx) => {
-  const { username, password } = ctx.request.body as {
-    username?: string;
-    password?: string;
-  };
+  try {
+    const { username, password } = ctx.request.body as {
+      username?: string;
+      password?: string;
+    };
 
-  if (!username || !password) {
-    ctx.status = 400;
-    ctx.body = { message: 'Username and password are required' };
-    return;
+    if (!username || !password) {
+      ctx.status = 400;
+      ctx.body = { message: 'Username and password are required' };
+      return;
+    }
+
+    const token = await signInOrRegister(username, password);
+    ctx.body = { token };
+  } catch (error) {
+    if (error instanceof HttpError) {
+      ctx.status = error.statusCode;
+      ctx.body = { message: error.message };
+    } else {
+      ctx.status = 500;
+      ctx.body = { message: 'Internal Server Error' };
+    }
   }
-
-  const token = await signInOrRegister(username, password);
-  ctx.body = { token };
 });
 
 export default router;
