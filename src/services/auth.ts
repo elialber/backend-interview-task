@@ -1,3 +1,4 @@
+
 import {
   CognitoIdentityProvider,
   UserNotFoundException,
@@ -35,81 +36,84 @@ export const signInOrRegister = async (
   username: string,
   password: string,
 ): Promise<string | undefined> => {
-  try {
-    const secretHash = calculateSecretHash(username);
-    const authResponse = await cognito.initiateAuth({
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      ClientId: process.env.COGNITO_CLIENT_ID || '',
-      AuthParameters: {
-        USERNAME: username,
-        PASSWORD: password,
-        SECRET_HASH: secretHash,
-      },
-    });
+  while (true) {
+    try {
+      const secretHash = calculateSecretHash(username);
+      const authResponse = await cognito.initiateAuth({
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        ClientId: process.env.COGNITO_CLIENT_ID || '',
+        AuthParameters: {
+          USERNAME: username,
+          PASSWORD: password,
+          SECRET_HASH: secretHash,
+        },
+      });
 
-    if (authResponse.AuthenticationResult) {
-      const accessToken = authResponse.AuthenticationResult.AccessToken;
-      const idToken = authResponse.AuthenticationResult.IdToken;
+      if (authResponse.AuthenticationResult) {
+        const accessToken = authResponse.AuthenticationResult.AccessToken;
+        const idToken = authResponse.AuthenticationResult.IdToken;
 
-      const userDetails = await cognito.getUser({ AccessToken: accessToken });
+        const userDetails = await cognito.getUser({ AccessToken: accessToken });
 
-      const email = userDetails.UserAttributes?.find(
-        (attr) => attr.Name === 'email',
-      )?.Value;
+        const email = userDetails.UserAttributes?.find(
+          (attr) => attr.Name === 'email',
+        )?.Value;
 
-      if (!email) {
-        throw new Error('Email not found in Cognito user attributes');
-      }
-
-      const userRepository = AppDataSource.getRepository(User);
-      let user = await userRepository.findOne({ where: { email } });
-
-      if (!user) {
-        const name =
-          userDetails.UserAttributes?.find((attr) => attr.Name === 'name')
-            ?.Value || '';
-        const role =
-          userDetails.UserAttributes?.find(
-            (attr) => attr.Name === 'custom:role',
-          )?.Value || 'user';
-
-        user = new User();
-        user.email = email;
-        user.name = name;
-        user.role = role;
-        await userRepository.save(user);
-      }
-
-      return idToken;
-    }
-  } catch (error) {
-    if (error instanceof UserNotFoundException) {
-      try {
-        const secretHash = calculateSecretHash(username);
-        await cognito.signUp({
-          ClientId: process.env.COGNITO_CLIENT_ID || '',
-          Username: username,
-          Password: password,
-          SecretHash: secretHash,
-          UserAttributes: [{ Name: 'email', Value: username }],
-        });
-
-        // For simplicity, we are auto-confirming the user. 
-        // In a real-world scenario, you would have a verification flow (e.g., email or SMS).
-        await cognito.adminConfirmSignUp({
-          UserPoolId: process.env.COGNITO_USER_POOL_ID || '',
-          Username: username,
-        });
-
-        return signInOrRegister(username, password);
-      } catch (error) {
-        if (error instanceof InvalidParameterException) {
-          throw new HttpError(400, error.message);
+        if (!email) {
+          throw new Error('Email not found in Cognito user attributes');
         }
-        throw error;
+
+        const userRepository = AppDataSource.getRepository(User);
+        let user = await userRepository.findOne({ where: { email } });
+
+        if (!user) {
+          const name =
+            userDetails.UserAttributes?.find((attr) => attr.Name === 'name')
+              ?.Value || '';
+          const role =
+            userDetails.UserAttributes?.find(
+              (attr) => attr.Name === 'custom:role',
+            )?.Value || 'user';
+
+          user = new User();
+          user.email = email;
+          user.name = name;
+          user.role = role;
+          await userRepository.save(user);
+        }
+
+        return idToken;
       }
+    } catch (error) {
+      if (error instanceof UserNotFoundException) {
+        try {
+          const secretHash = calculateSecretHash(username);
+          await cognito.signUp({
+            ClientId: process.env.COGNITO_CLIENT_ID || '',
+            Username: username,
+            Password: password,
+            SecretHash: secretHash,
+            UserAttributes: [{ Name: 'email', Value: username }],
+          });
+
+          // For simplicity, we are auto-confirming the user. 
+          // In a real-world scenario, you would have a verification flow (e.g., email or SMS).
+          await cognito.adminConfirmSignUp({
+            UserPoolId: process.env.COGNITO_USER_POOL_ID || '',
+            Username: username,
+          });
+
+          // Continue the loop to try to sign in again
+          continue;
+        } catch (error) {
+          if (error instanceof InvalidParameterException) {
+            throw new HttpError(400, error.message);
+          }
+          throw error;
+        }
+      }
+      console.error(error);
+      throw new Error('Authentication failed');
     }
-    console.error(error);
-    throw new Error('Authentication failed');
   }
 };

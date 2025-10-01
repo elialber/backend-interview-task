@@ -54,6 +54,56 @@ describe('Edit Account E2E', () => {
     );
   });
 
+  it('should allow an admin to update name only', async () => {
+    // Arrange
+    (authMiddleware as jest.Mock).mockImplementation(async (ctx, next) => {
+      ctx.state.user = {
+        email: 'admin@example.com',
+        'cognito:groups': ['admin'],
+      };
+      await next();
+    });
+    const mockUser = new User();
+    mockUser.role = 'user';
+    mockUserRepository.findOne.mockResolvedValue(mockUser);
+
+    // Act
+    const response = await request(app.callback())
+      .put('/edit-account')
+      .send({ name: 'New Name' });
+
+    // Assert
+    expect(response.status).toBe(200);
+    expect(mockUserRepository.save).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'New Name', role: 'user' }),
+    );
+  });
+
+  it('should allow an admin to update role only', async () => {
+    // Arrange
+    (authMiddleware as jest.Mock).mockImplementation(async (ctx, next) => {
+      ctx.state.user = {
+        email: 'admin@example.com',
+        'cognito:groups': ['admin'],
+      };
+      await next();
+    });
+    const mockUser = new User();
+    mockUser.name = 'Old Name';
+    mockUserRepository.findOne.mockResolvedValue(mockUser);
+
+    // Act
+    const response = await request(app.callback())
+      .put('/edit-account')
+      .send({ role: 'admin' });
+
+    // Assert
+    expect(response.status).toBe(200);
+    expect(mockUserRepository.save).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Old Name', role: 'admin' }),
+    );
+  });
+
   it('should allow a user to update their name and set isOnboarded to true', async () => {
     // Arrange
     (authMiddleware as jest.Mock).mockImplementation(async (ctx, next) => {
