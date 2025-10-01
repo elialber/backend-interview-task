@@ -5,6 +5,25 @@ import { User } from '../entities/User';
 
 const router = new Router();
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get all users (admin only)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Forbidden
+ */
 router.get('/users', authMiddleware, async (ctx) => {
   const userFromToken = ctx.state.user;
 

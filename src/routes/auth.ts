@@ -3,6 +3,37 @@ import { signInOrRegister } from '../services/auth';
 
 const router = new Router();
 
+/**
+ * @swagger
+ * /auth:
+ *   post:
+ *     summary: Authenticate user and get a JWT token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Unauthorized
+ */
 router.post('/auth', async (ctx) => {
   const { username, password } = ctx.request.body as {
     username?: string;

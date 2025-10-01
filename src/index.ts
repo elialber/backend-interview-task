@@ -3,6 +3,8 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import { AppDataSource } from './data-source';
 import router from './routes';
+import { koaSwagger } from 'koa2-swagger-ui';
+import { swaggerSpec } from './swagger';
 
 const app = new Koa();
 const port = 3000;
@@ -13,6 +15,7 @@ AppDataSource.initialize()
 
     app.use(bodyParser());
     app.use(router.routes()).use(router.allowedMethods());
+    app.use(koaSwagger({ routePrefix: '/docs', swaggerOptions: { spec: swaggerSpec } }));
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);

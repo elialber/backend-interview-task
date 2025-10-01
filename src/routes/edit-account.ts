@@ -5,6 +5,36 @@ import { User } from '../entities/User';
 
 const router = new Router();
 
+/**
+ * @swagger
+ * /edit-account:
+ *   put:
+ *     summary: Edit the authenticated user's account
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: Not Found
+ */
 router.put('/edit-account', authMiddleware, async (ctx) => {
   const { name, role } = ctx.request.body as { name?: string; role?: string };
   const userFromToken = ctx.state.user;
