@@ -30,12 +30,32 @@ npm test
 ```
 
 ### Acessar documentação
-- Swagger: http://localhost:3001/docs
-- Postman: Importe `docs/postman/postman_collection.json`
+- **Swagger (Produção):** http://56.124.105.5/docs
+- **Swagger (Local):** http://localhost:3001/docs
+- **Postman:** Importe `docs/postman/postman_collection.json`
 
 ---
 
 ## 🌐 Deploy em Produção
+
+### 🚀 Aplicação em Produção (ATIVA)
+
+**URL:** http://56.124.105.5
+
+**Endpoints disponíveis:**
+- `POST /auth` - Autenticação
+- `GET /me` - Dados do usuário autenticado
+- `PUT /edit-account` - Editar conta
+- `GET /users` - Listar usuários (admin only)
+- `GET /docs` - Documentação Swagger
+
+**Infraestrutura:**
+- Servidor: AWS EC2 t2.micro (Free Tier)
+- Região: sa-east-1 (São Paulo)
+- Banco: PostgreSQL 14 (containerizado)
+- Custo: $0/mês (Free Tier primeiro ano)
+
+---
 
 ### ✅ Imagem Docker (Pronta no ECR)
 ```
