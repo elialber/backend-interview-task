@@ -190,3 +190,56 @@ This route returns a list of all users. This route is only accessible to admins.
   "message": "Only admins can access this route"
 }
 ```
+
+## cURL Examples
+
+### POST /auth
+
+```bash
+curl -X POST 'http://localhost:3001/auth' \
+-H 'Content-Type: application/json' \
+-d \
+'{
+  "username": "test@example.com",
+  "password": "your-password"
+}'
+```
+
+### GET /me
+
+```bash
+curl -X GET 'http://localhost:3001/me' \
+-H 'Authorization: Bearer <jwt_token>'
+```
+
+### PUT /edit-account (as User)
+
+```bash
+curl -X PUT 'http://localhost:3001/edit-account' \
+-H 'Authorization: Bearer <jwt_token>' \
+-H 'Content-Type: application/json' \
+-d \
+'{
+  "name": "New User Name"
+}'
+```
+
+### PUT /edit-account (as Admin)
+
+```bash
+curl -X PUT 'http://localhost:3001/edit-account' \
+-H 'Authorization: Bearer <jwt_token>' \
+-H 'Content-Type: application/json' \
+-d \
+'{
+  "name": "New User Name",
+  "role": "admin"
+}'
+```
+
+### GET /users (as Admin)
+
+```bash
+curl -X GET 'http://localhost:3001/users' \
+-H 'Authorization: Bearer <jwt_token>'
+```
