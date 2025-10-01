@@ -57,33 +57,6 @@ npm test
 
 ---
 
-### ✅ Imagem Docker (Pronta no ECR)
-```
-629830531421.dkr.ecr.sa-east-1.amazonaws.com/backend-interview-task:latest
-```
-
-### 🎯 Opções de Deploy
-
-#### 1. **Render.com** (RECOMENDADO - 100% GRÁTIS) ⭐
-- Custo: $0/mês
-- PostgreSQL incluído (1GB)
-- SSL automático
-- [Ver guia completo](./DEPLOY.md#opção-1-rendercom-recomendado---100-gratuito-)
-
-#### 2. **Railway.dev** (Grátis com $5 crédito)
-- Custo: $0-5/mês
-- Deploy via CLI
-- [Ver guia completo](./DEPLOY.md#opção-2-railwaydev-grátis-com-5-crédito-)
-
-#### 3. **AWS ECS/Fargate**
-- Custo: ~$15-25/mês
-- Requer permissão RDS
-- [Ver guia completo](./DEPLOY.md#opção-3-aws-usando-imagem-ecr-já-criada-)
-
-📖 **[Guia Completo de Deploy](./DEPLOY.md)**
-
----
-
 ## 📋 Requisitos e Implementação
 
 ### 1. ✅ Inicialização do Repositório
