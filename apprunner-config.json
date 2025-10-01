@@ -1,0 +1,24 @@
+{
+  "SourceConfiguration": {
+    "ImageRepository": {
+      "ImageIdentifier": "629830531421.dkr.ecr.sa-east-1.amazonaws.com/backend-interview-task:latest",
+      "ImageRepositoryType": "ECR",
+      "ImageConfiguration": {
+        "Port": "3000",
+        "RuntimeEnvironmentVariables": {
+          "NODE_ENV": "production",
+          "DB_HOST": "localhost",
+          "DB_PORT": "5432",
+          "DB_USERNAME": "postgres",
+          "DB_PASSWORD": "postgres",
+          "DB_NAME": "backend_interview"
+        }
+      }
+    },
+    "AutoDeploymentsEnabled": false
+  },
+  "InstanceConfiguration": {
+    "Cpu": "0.25 vCPU",
+    "Memory": "0.5 GB"
+  }
+}

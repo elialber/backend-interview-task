@@ -95,3 +95,7 @@ dist/
 !.env.project
 !.env.vault
 .env.enc
+
+# SSH Keys
+*.pem
+*.key
