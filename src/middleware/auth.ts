@@ -43,17 +43,20 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
       throw new Error('Invalid token');
     }
 
-    jwt.verify(
-      token,
-      pem,
-      { issuer: process.env.JWT_ISSUER },
-      (err, payload) => {
-        if (err) {
-          throw err;
-        }
-        ctx.state.user = payload;
-      },
-    );
+    await new Promise<void>((resolve, reject) => {
+      jwt.verify(
+        token,
+        pem,
+        { issuer: process.env.JWT_ISSUER },
+        (err, payload) => {
+          if (err) {
+            return reject(err);
+          }
+          ctx.state.user = payload;
+          resolve();
+        },
+      );
+    });
 
     await next();
   } catch (error) {
