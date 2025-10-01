@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: backend-interview-task
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        fromDatabase:
+          name: backend-interview-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: backend-interview-db
+          property: port
+      - key: DB_USERNAME
+        fromDatabase:
+          name: backend-interview-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: backend-interview-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: backend-interview-db
+          property: database
+      - key: JWT_JWKS_URI
+        sync: false
+      - key: JWT_ISSUER
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: sa-east-1
+      - key: COGNITO_USER_POOL_ID
+        sync: false
+      - key: COGNITO_CLIENT_ID
+        sync: false
+      - key: COGNITO_CLIENT_SECRET
+        sync: false
+
+databases:
+  - name: backend-interview-db
+    databaseName: backend_interview
+    plan: free
+    region: oregon
+
