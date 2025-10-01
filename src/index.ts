@@ -7,7 +7,7 @@ import { koaSwagger } from 'koa2-swagger-ui';
 import { swaggerSpec } from './swagger';
 
 const app = new Koa();
-const port = 3001;
+const port = 3000;
 
 AppDataSource.initialize()
   .then(() => {
