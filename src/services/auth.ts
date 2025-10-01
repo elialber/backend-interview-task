@@ -4,22 +4,31 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { AppDataSource } from '../data-source';
 import { User } from '../entities/User';
+import crypto from 'crypto';
 
 const cognito = new CognitoIdentityProvider({
   region: process.env.AWS_REGION,
 });
+
+const calculateSecretHash = (username: string) => {
+  const hmac = crypto.createHmac('sha256', process.env.COGNITO_CLIENT_SECRET || '');
+  hmac.update(username + (process.env.COGNITO_CLIENT_ID || ''));
+  return hmac.digest('base64');
+};
 
 export const signInOrRegister = async (
   username: string,
   password: string,
 ): Promise<string | undefined> => {
   try {
+    const secretHash = calculateSecretHash(username);
     const authResponse = await cognito.initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       ClientId: process.env.COGNITO_CLIENT_ID || '',
       AuthParameters: {
         USERNAME: username,
         PASSWORD: password,
+        SECRET_HASH: secretHash,
       },
     });
 
@@ -60,14 +69,16 @@ export const signInOrRegister = async (
     }
   } catch (error) {
     if (error instanceof UserNotFoundException) {
+      const secretHash = calculateSecretHash(username);
       await cognito.signUp({
         ClientId: process.env.COGNITO_CLIENT_ID || '',
         Username: username,
         Password: password,
+        SecretHash: secretHash,
         UserAttributes: [{ Name: 'email', Value: username }],
       });
 
-      // For simplicity, we are auto-confirming the user.
+      // For simplicity, we are auto-confirming the user. 
       // In a real-world scenario, you would have a verification flow (e.g., email or SMS).
       await cognito.adminConfirmSignUp({
         UserPoolId: process.env.COGNITO_USER_POOL_ID || '',
