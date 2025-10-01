@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import { signInOrRegister } from '../services/auth';
+import { signInOrRegister, HttpError } from '../services/auth';
 
 const router = new Router();
 
@@ -52,6 +52,9 @@ router.post('/auth', async (ctx) => {
   } catch (error) {
     if (error instanceof HttpError) {
       ctx.status = error.statusCode;
+      ctx.body = { message: error.message };
+    } else if (error instanceof Error) {
+      ctx.status = 500;
       ctx.body = { message: error.message };
     } else {
       ctx.status = 500;
