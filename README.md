@@ -47,6 +47,7 @@ Nesta tarefa, o candidato deverá configurar um projeto backend utilizando Node.
    - Utilize commits pequenos e de claro entendimento.
 
 **Diferenciais**
+
 - Testes unitários e E2E
 - Postman com rotas de testes
 - Flow no Postman com testes aplicados

@@ -1,4 +1,3 @@
-
 import Router from 'koa-router';
 import authRouter from './auth';
 import meRouter from './me';

@@ -1,4 +1,3 @@
-
 import Router from 'koa-router';
 import { authMiddleware } from '../middleware/auth';
 

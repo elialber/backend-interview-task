@@ -1,10 +1,9 @@
-
 import { Context, Next } from 'koa';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import fetch from 'node-fetch';
 
-let pems: { [key: string]: string } = {};
+const pems: { [key: string]: string } = {};
 
 const setUp = async () => {
   try {
@@ -44,12 +43,17 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
       throw new Error('Invalid token');
     }
 
-    jwt.verify(token, pem, { issuer: process.env.JWT_ISSUER }, (err, payload) => {
-      if (err) {
-        throw err;
-      }
-      ctx.state.user = payload;
-    });
+    jwt.verify(
+      token,
+      pem,
+      { issuer: process.env.JWT_ISSUER },
+      (err, payload) => {
+        if (err) {
+          throw err;
+        }
+        ctx.state.user = payload;
+      },
+    );
 
     await next();
   } catch (error) {

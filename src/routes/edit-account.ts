@@ -1,4 +1,3 @@
-
 import Router from 'koa-router';
 import { authMiddleware } from '../middleware/auth';
 import { AppDataSource } from '../data-source';
@@ -11,7 +10,9 @@ router.put('/edit-account', authMiddleware, async (ctx) => {
   const userFromToken = ctx.state.user;
 
   const userRepository = AppDataSource.getRepository(User);
-  const user = await userRepository.findOne({ where: { email: userFromToken.email } });
+  const user = await userRepository.findOne({
+    where: { email: userFromToken.email },
+  });
 
   if (!user) {
     ctx.status = 404;

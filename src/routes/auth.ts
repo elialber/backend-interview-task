@@ -1,11 +1,13 @@
-
 import Router from 'koa-router';
 import { signInOrRegister } from '../services/auth';
 
 const router = new Router();
 
 router.post('/auth', async (ctx) => {
-  const { username, password } = ctx.request.body as { username?: string; password?: string };
+  const { username, password } = ctx.request.body as {
+    username?: string;
+    password?: string;
+  };
 
   if (!username || !password) {
     ctx.status = 400;

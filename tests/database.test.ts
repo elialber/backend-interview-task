@@ -1,4 +1,3 @@
-
 import { AppDataSource } from '../src/data-source';
 
 describe('Database Connection', () => {

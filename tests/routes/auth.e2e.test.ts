@@ -30,12 +30,12 @@ describe('Auth E2E', () => {
 
   it('should return 400 for missing credentials', async () => {
     // Act
-    const response = await request(app.callback())
-      .post('/auth')
-      .send({});
+    const response = await request(app.callback()).post('/auth').send({});
 
     // Assert
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({ message: 'Username and password are required' });
+    expect(response.body).toEqual({
+      message: 'Username and password are required',
+    });
   });
 });

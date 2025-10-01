@@ -21,4 +21,3 @@ AppDataSource.initialize()
   .catch((error) =>
     console.log('Error during Data Source initialization', error),
   );
-

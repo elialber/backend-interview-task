@@ -1,5 +1,7 @@
-
-import { CognitoIdentityProvider, UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  CognitoIdentityProvider,
+  UserNotFoundException,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { AppDataSource } from '../../src/data-source';
 import { User } from '../../src/entities/User';
 import { signInOrRegister } from '../../src/services/auth';
@@ -23,7 +25,9 @@ describe('Auth Service', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (AppDataSource.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
+    (AppDataSource.getRepository as jest.Mock).mockReturnValue(
+      mockUserRepository,
+    );
   });
 
   describe('signInOrRegister', () => {
@@ -40,7 +44,9 @@ describe('Auth Service', () => {
       const mockUserDetails = {
         UserAttributes: [{ Name: 'email', Value: username }],
       };
-      (mockCognito.initiateAuth as jest.Mock).mockResolvedValue(mockAuthResponse);
+      (mockCognito.initiateAuth as jest.Mock).mockResolvedValue(
+        mockAuthResponse,
+      );
       (mockCognito.getUser as jest.Mock).mockResolvedValue(mockUserDetails);
 
       const mockUser = new User();
@@ -67,7 +73,9 @@ describe('Auth Service', () => {
       // Arrange
       const username = 'new@example.com';
       const password = 'password';
-      (mockCognito.initiateAuth as jest.Mock).mockRejectedValueOnce(new UserNotFoundException({ message: 'User not found', $metadata: {} }));
+      (mockCognito.initiateAuth as jest.Mock).mockRejectedValueOnce(
+        new UserNotFoundException({ message: 'User not found', $metadata: {} }),
+      );
       (mockCognito.signUp as jest.Mock).mockResolvedValue({});
       (mockCognito.adminConfirmSignUp as jest.Mock).mockResolvedValue({});
       const mockAuthResponse = {
@@ -79,7 +87,9 @@ describe('Auth Service', () => {
       const mockUserDetails = {
         UserAttributes: [{ Name: 'email', Value: username }],
       };
-      (mockCognito.initiateAuth as jest.Mock).mockResolvedValue(mockAuthResponse);
+      (mockCognito.initiateAuth as jest.Mock).mockResolvedValue(
+        mockAuthResponse,
+      );
       (mockCognito.getUser as jest.Mock).mockResolvedValue(mockUserDetails);
 
       mockUserRepository.findOne.mockResolvedValue(null);
