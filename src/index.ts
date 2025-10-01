@@ -7,7 +7,7 @@ import { koaSwagger } from 'koa2-swagger-ui';
 import { swaggerSpec } from './swagger';
 
 const app = new Koa();
-const port = 3000;
+const port = 3001;
 
 AppDataSource.initialize()
   .then(() => {
@@ -15,7 +15,12 @@ AppDataSource.initialize()
 
     app.use(bodyParser());
     app.use(router.routes()).use(router.allowedMethods());
-    app.use(koaSwagger({ routePrefix: '/docs', swaggerOptions: { spec: swaggerSpec } }));
+    app.use(
+      koaSwagger({
+        routePrefix: '/docs',
+        swaggerOptions: { spec: swaggerSpec as any },
+      }),
+    );
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);

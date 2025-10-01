@@ -22,13 +22,18 @@ describe('Users E2E', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (AppDataSource.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
+    (AppDataSource.getRepository as jest.Mock).mockReturnValue(
+      mockUserRepository,
+    );
   });
 
   it('should allow an admin to get all users', async () => {
     // Arrange
     (authMiddleware as jest.Mock).mockImplementation(async (ctx, next) => {
-      ctx.state.user = { email: 'admin@example.com', 'cognito:groups': ['admin'] };
+      ctx.state.user = {
+        email: 'admin@example.com',
+        'cognito:groups': ['admin'],
+      };
       await next();
     });
     const mockUsers = [new User(), new User()];
@@ -45,7 +50,10 @@ describe('Users E2E', () => {
   it('should not allow a regular user to get all users', async () => {
     // Arrange
     (authMiddleware as jest.Mock).mockImplementation(async (ctx, next) => {
-      ctx.state.user = { email: 'user@example.com', 'cognito:groups': ['user'] };
+      ctx.state.user = {
+        email: 'user@example.com',
+        'cognito:groups': ['user'],
+      };
       await next();
     });
 
@@ -54,6 +62,8 @@ describe('Users E2E', () => {
 
     // Assert
     expect(response.status).toBe(403);
-    expect(response.body).toEqual({ message: 'Only admins can access this route' });
+    expect(response.body).toEqual({
+      message: 'Only admins can access this route',
+    });
   });
 });
